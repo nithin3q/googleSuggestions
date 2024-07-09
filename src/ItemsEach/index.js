@@ -4,7 +4,7 @@ class ItemsEach extends Component{
     render(){
         const {item} = this.props
         return(
-            <li className = 'animated-heading'>{item}</li>
+            <li>{item}</li>
         )
     }
 }
