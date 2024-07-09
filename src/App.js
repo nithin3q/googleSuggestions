@@ -16,9 +16,6 @@ class App extends Component{
           client: 'firefox',
           q: search_result
         },
-        headers: {
-          'Access-Control-Allow-Origin': '*', 
-        },
       })
       this.setState({suggestions: response.data[1]})
     }
