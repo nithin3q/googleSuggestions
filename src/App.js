@@ -11,7 +11,7 @@ class App extends Component{
   getSuggestions = async() =>{
     const {search_result} = this.state
     try{
-      const response = await axios.get('https://suggestqueries.google.com/complete/search', {
+      const response = await axios.get('/complete/search', {
         params: {
           client: 'firefox',
           q: search_result
