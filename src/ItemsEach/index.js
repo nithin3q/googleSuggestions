@@ -1,12 +1,10 @@
-import {Component} from 'react'
-import './index.css'
-class ItemsEach extends Component{
-    render(){
-        const {item} = this.props
-        return(
-            <li>{item}</li>
-        )
-    }
-}
+// ItemsEach.js
+import React from 'react';
 
-export default ItemsEach
+const ItemsEach = ({ item }) => {
+  return (
+    <li>{item.value}</li>
+  );
+};
+
+export default ItemsEach;

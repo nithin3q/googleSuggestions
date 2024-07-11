@@ -1,6 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import ItemsEach from './ItemsEach';
 
 const App = () => {
@@ -11,19 +10,30 @@ const App = () => {
     setSearchResult(event.target.value);
   };
 
-  const getSuggestions = async () => {
-    try {
-      const response = await axios.get(`/complete/search`, {
-        params: {
-          client: 'firefox',
-          q: searchResult,
-        },
-      });
-      setSuggestions(response.data[1]);
-    } catch (e) {
-      console.log(e);
+  useEffect(() => {
+    const fetchSuggestions = (requestTerm) => {
+      const script = document.createElement('script');
+      script.src = `https://suggestqueries.google.com/complete/search?callback=suggestCallBack&hl=en&ds=yt&jsonp=suggestCallBack&q=${encodeURIComponent(
+        requestTerm
+      )}&client=youtube`;
+
+      window.suggestCallBack = (data) => {
+        const suggestions = data[1].map((val) => ({ value: val[0] }));
+        setSuggestions(suggestions.slice(0, 7));
+      };
+
+      document.body.appendChild(script);
+
+      // Cleanup script
+      return () => {
+        document.body.removeChild(script);
+      };
+    };
+
+    if (searchResult) {
+      fetchSuggestions(searchResult);
     }
-  };
+  }, [searchResult]);
 
   return (
     <div className="main-background">
@@ -35,10 +45,6 @@ const App = () => {
         onChange={getSearch}
         className="input-box"
       />
-      <button onClick={getSuggestions} className="button">
-        Submit
-      </button>
-
       <ul>
         {suggestions.map((eachItem, index) => (
           <ItemsEach key={index} item={eachItem} />
